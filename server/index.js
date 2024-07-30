@@ -5,6 +5,7 @@ import authRoute from "./routes/auth.js";
 import http from "http";
 import { Server } from "socket.io";
 dotenv.config();
+import cors from "cors";
 
 const app = express();
 const port = process.env.PORT;
@@ -12,10 +13,16 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 connectDB();
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
+io.on("connection", (socket) => {
+  console.log("a user connected");
   console.log(socket.id);
 });
 

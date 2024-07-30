@@ -8,10 +8,10 @@ const login = async (req, res) => {
     const body = await loginSchema.validateAsync(req.body);
     const { email, password } = body;
 
-    const exitUser = await UserModel.findOne({ email });
+    const existUser = await UserModel.findOne({ email });
 
-    if (exitUser) {
-      const checkPassword = await bcrypt.compare(password, exitUser.password);
+    if (existUser) {
+      const checkPassword = await bcrypt.compare(password, existUser.password);
 
       if (!checkPassword) {
         return res.status(404).json({
@@ -21,8 +21,8 @@ const login = async (req, res) => {
       }
 
       const payload = {
-        userId: exitUser._id,
-        userEmail: exitUser.email,
+        userId: existUser._id,
+        userEmail: existUser.email,
       };
 
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -37,6 +37,7 @@ const login = async (req, res) => {
       return res.cookie("token", token, option).json({
         success: true,
         message: "user login successfully",
+        existUser,
         token,
       });
     } else {

@@ -13,7 +13,7 @@ export const verifyJwt = async (req, res, next) => {
 
     try {
       const decode = jwt.verify(token, process.env.JWT_SECRET);
-      req.exitUser = decode;
+      req.existUser = decode;
     } catch (error) {
       return res.status(404).json({
         success: false,
