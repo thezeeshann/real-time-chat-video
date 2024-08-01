@@ -1,8 +1,11 @@
+import UserMenu from "./UserMenu";
+
 const Char = () => {
   return (
-    <div className="flex flex-col flex-1 text-white bg-gray-700">
-      <div className="p-4 border-b border-gray-600">
+    <div className="flex flex-col flex-1 text-white bg-gray-700 ">
+      <div className="flex flex-row items-center justify-between p-4 border-b border-gray-600">
         <h2 className="text-xl font-bold">Chat with Khizar</h2>
+        <UserMenu />
       </div>
       <div className="flex-1 p-4 overflow-y-auto">
         <div className="flex flex-col space-y-4">
