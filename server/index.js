@@ -2,17 +2,32 @@ import express from "express";
 import dotenv from "dotenv";
 import { connectDB } from "./lib/db.js";
 import authRoute from "./routes/auth.js";
+import friendRoute from "./routes/friends.js";
 import http from "http";
 import { Server } from "socket.io";
-dotenv.config();
+import cookieParser from "cookie-parser";
 import cors from "cors";
+import verifyTokenSocket from "./lib/middleware/authSocket.js";
+import newConnectionHandlere from "./socketHandler/newConnectionHandler.js";
+import disconnectHandler from "./socketHandler/disconnectedHandler.js";
+dotenv.config();
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 8000;
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+io.use((socket, next) => {
+  verifyTokenSocket(socket, next);
+});
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -24,6 +39,11 @@ connectDB();
 io.on("connection", (socket) => {
   console.log("a user connected");
   console.log(socket.id);
+  newConnectionHandlere(socket, io);
+
+  socket.on("disconnect", () => {
+    disconnectHandler(socket);
+  });
 });
 
 app.get("/", (req, res) => {
@@ -34,8 +54,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/friend", friendRoute);
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(
     `Listening on port ${port}. Visit http://localhost:${port} in your browser.`
   );
