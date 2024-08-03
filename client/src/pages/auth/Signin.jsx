@@ -32,6 +32,7 @@ const SignIn = () => {
         localStorage.setItem("token", JSON.stringify(response.data.token));
         localStorage.setItem("user", JSON.stringify(response.data.existUser));
       } else {
+        console.log(response.data)
         toast.error(response?.data.message);
       }
     } catch (error) {
