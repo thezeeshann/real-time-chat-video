@@ -1,7 +1,35 @@
+import axios from "axios";
 import { useState } from "react";
+import { FRIEND_INVITATION_API } from "../redux/api";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const Sidebar = () => {
+  
+  const { token } = useSelector((state) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `${FRIEND_INVITATION_API}`,
+        { email },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(response);
+      if (response.data.success === true) {
+        toast.success(response.data.message);
+        setIsOpen(false);
+      } else {
+        toast.error(response?.data.message);
+      }
+    } catch (error) {
+      console.log("FRIEND INVITATION API ERROR", error);
+      toast.error(error.response.data.message);
+    }
+  };
 
   return (
     <>
@@ -52,20 +80,47 @@ const Sidebar = () => {
       </div>
 
       {isOpen === true && (
-         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-         <div className="p-4 bg-white w-[500px] h-[180px] rounded">
-           <p className="font-semibold text-neutral-500">Invite a Friend</p>
-           <p className="font-semibold text-neutral-500">Enter a email address of friend which you would like to add</p>
-           <div className="flex flex-col gap-y-1">
-             <label htmlFor="email" className="font-semibold text-neutral-500">Email</label>
-             <input type="email" name="email" id="email" className="border-[1px] py-1 p-2" placeholder="Email Address"/>
-           </div>
-           <div className="flex flex-row items-center justify-between mt-2 gap-x-2">
-           <button onClick={()=>setIsOpen(false)} className="cursor-pointer text-white bg-neutral-500 py-2 rounded-md w-[50%] font-semibold">Colse</button>
-           <button className="text-white bg-blue-500 rounded-md w-[50%] cursor-pointer py-2 font-semibold" type="submit">Send</button>
-           </div>
-         </div>
-       </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <form onSubmit={handleSubmit}>
+            <div className="p-4 bg-white w-[500px] h-[180px] rounded">
+              <p className="font-semibold text-neutral-500">Invite a Friend</p>
+              <p className="font-semibold text-neutral-500">
+                Enter a email address of friend which you would like to add
+              </p>
+              <div className="flex flex-col gap-y-1">
+                <label
+                  htmlFor="email"
+                  className="font-semibold text-neutral-500"
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  id="email"
+                  className="border-[1px] py-1 p-2"
+                  placeholder="Email Address"
+                />
+              </div>
+              <div className="flex flex-row items-center justify-between mt-2 gap-x-2">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="cursor-pointer text-white bg-neutral-500 py-2 rounded-md w-[50%] font-semibold"
+                >
+                  Colse
+                </button>
+                <button
+                  className="text-white bg-blue-500 rounded-md w-[50%] cursor-pointer py-2 font-semibold"
+                  type="submit"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       )}
     </>
   );
