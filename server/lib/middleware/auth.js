@@ -10,7 +10,6 @@ export const verifyJwt = async (req, res, next) => {
         message: "Token missing",
       });
     }
-
     try {
       const decode = jwt.verify(token, process.env.JWT_SECRET);
       req.existUser = decode;
