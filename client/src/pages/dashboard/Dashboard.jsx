@@ -1,13 +1,15 @@
 import Chat from "../../components/Chat";
 import Sidebar from "../../components/Sidebar";
 import { connectWithSocketServer } from "../../communication/socket";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const Dashboard = () => {
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
   if (token !== null && user !== null) {
-    connectWithSocketServer(token);
+    connectWithSocketServer(token, dispatch);
   }
 
   return (

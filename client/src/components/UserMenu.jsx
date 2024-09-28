@@ -15,7 +15,7 @@ const UserMenu = () => {
 
   return (
     <section className="">
-      <p className="relative cursor-pointer" onClick={() => setIsOpen((prev) => !prev)}>Z</p>
+      <p className="relative cursor-pointer" onClick={() => setIsOpen((prev) => !prev)}>user</p>
       {isOpen === true && (
         <ul className="absolute p-2 bg-white rounded right-4 text-neutral-900">
           <li className="p-1 font-semibold rounded cursor-pointer hover:bg-neutral-500 hover:text-white">Dashboard</li>
