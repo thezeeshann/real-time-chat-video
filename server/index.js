@@ -10,6 +10,7 @@ import cors from "cors";
 import verifyTokenSocket from "./lib/middleware/authSocket.js";
 import newConnectionHandlere from "./socketHandler/newConnectionHandler.js";
 import disconnectHandler from "./socketHandler/disconnectedHandler.js";
+import { setSocketServerInstance } from "./lib/store.js";
 dotenv.config();
 
 const app = express();
@@ -22,6 +23,8 @@ const io = new Server(server, {
     credentials: true,
   },
 });
+
+setSocketServerInstance(io);
 io.use((socket, next) => {
   verifyTokenSocket(socket, next);
 });
