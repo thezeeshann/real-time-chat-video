@@ -1,6 +1,7 @@
 import friendInvitationSchema from "../lib/validations/friend.js";
 import FriendModel from "../models/friend.js";
 import UserModel from "../models/user.js";
+import friendsPendingInvitations from "../socketHandler/updates/friends.js";
 
 export const sendFriendInvitation = async (req, res) => {
   try {
@@ -53,6 +54,8 @@ export const sendFriendInvitation = async (req, res) => {
       senderId: userId,
       receiverId: targetUser._id,
     });
+
+    friendsPendingInvitations(targetUser._id.toString())  
 
     return res.status(201).json({
       success: true,
