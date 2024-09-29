@@ -3,10 +3,14 @@ import { useState } from "react";
 import { FRIEND_INVITATION_API } from "../redux/api";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import {
+  handleAcceptInvitations,
+  handleRejectInvitations,
+} from "../services/friendInvitation";
 
 const Sidebar = () => {
-  
   const { token } = useSelector((state) => state.auth);
+  const { pendingFriends } = useSelector((state) => state.friend);
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
 
@@ -55,27 +59,31 @@ const Sidebar = () => {
           </div>
         </div>
         <div className="flex flex-col p-4 gap-y-2">
-          <button className="w-full text-blue-500">INVITATIONS</button>
-          <div className="flex flex-col gap-y-2">
-            <div className="flex flex-row items-center justify-between ">
-              <div className="flex flex-row items-center gap-x-2">
-                <span className="p-2 bg-blue-500 rounded-full ">Ma</span>
-                <p>Mark</p>
+          <p className="w-full text-blue-500">INVITATIONS</p>
+          {pendingFriends.map((friend) => (
+            <div key={friend._id} className="flex flex-col gap-y-2">
+              <div className="flex flex-row items-center justify-between ">
+                <div className="flex flex-row items-center gap-x-2">
+                  <span className="p-2 capitalize bg-blue-500 rounded-full">
+                    {friend.senderId.name.slice(0, 2)}
+                  </span>
+                  <p className="capitalize">{friend.senderId.name}</p>
+                </div>
+                <span
+                  onClick={() => handleRejectInvitations(friend._id, token)}
+                  className="cursor-pointer"
+                >
+                  X
+                </span>
+                <span
+                  onClick={() => handleAcceptInvitations(friend._id, token)}
+                  className="cursor-pointer"
+                >
+                  ✓
+                </span>
               </div>
-              <span>X</span>
-              <span>✓</span>
             </div>
-          </div>
-          <div className="flex flex-col gap-y-2">
-            <div className="flex flex-row items-center justify-between ">
-              <div className="flex flex-row items-center gap-x-2">
-                <span className="p-2 bg-blue-500 rounded-full ">Ma</span>
-                <p>Mark</p>
-              </div>
-              <span>X</span>
-              <span>✓</span>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
