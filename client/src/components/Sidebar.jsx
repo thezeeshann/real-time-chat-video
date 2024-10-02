@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { FRIEND_INVITATION_API } from "../redux/api";
+import { GoDotFill } from "react-icons/go";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import {
@@ -11,6 +12,8 @@ import {
 const Sidebar = () => {
   const { token } = useSelector((state) => state.auth);
   const { pendingFriends } = useSelector((state) => state.friend);
+  const { onlineUsers } = useSelector((state) => state.friend);
+  const { friends } = useSelector((state) => state.friend);
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
 
@@ -48,15 +51,32 @@ const Sidebar = () => {
         </div>
         <p className="mt-2 font-semibold text-center">Private message</p>
         <div className="flex-1 p-4">
-          <div className="flex flex-col gap-y-2">
-            <div className="flex flex-row items-center justify-between ">
-              <div className="flex flex-row items-center gap-x-2">
-                <span className="p-2 bg-blue-500 rounded-full ">Ma</span>
-                <p>Mark</p>
+          {friends.map((friend) => {
+            const isOnline = onlineUsers.some(
+              (user) => user.socketId.userId === friend.id
+            );
+            return (
+              <div key={friend.id} className="flex flex-col py-2 gap-y-1">
+                <div className="flex flex-row items-center justify-between">
+                  <div className="flex flex-row items-center gap-x-2">
+                    <span className="p-2 capitalize bg-blue-500 rounded-full">
+                      {friend?.name?.slice(0, 2)}
+                    </span>
+                    <p>{friend?.name}</p>
+                  </div>
+                  {isOnline ? (
+                    <span>
+                      <GoDotFill size={20} className="text-green-500" />
+                    </span>
+                  ) : (
+                    <span>
+                      <GoDotFill size={20} className="text-gray-500" />
+                    </span>
+                  )}
+                </div>
               </div>
-              <span>*</span>
-            </div>
-          </div>
+            );
+          })}
         </div>
         <div className="flex flex-col p-4 gap-y-2">
           <p className="w-full text-blue-500">INVITATIONS</p>
@@ -65,9 +85,9 @@ const Sidebar = () => {
               <div className="flex flex-row items-center justify-between ">
                 <div className="flex flex-row items-center gap-x-2">
                   <span className="p-2 capitalize bg-blue-500 rounded-full">
-                    {friend.senderId.name.slice(0, 2)}
+                    {friend?.senderId?.name.slice(0, 2)}
                   </span>
-                  <p className="capitalize">{friend.senderId.name}</p>
+                  <p className="capitalize">{friend?.senderId?.name}</p>
                 </div>
                 <span
                   onClick={() => handleRejectInvitations(friend._id, token)}
