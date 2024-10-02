@@ -1,5 +1,9 @@
 import io from "socket.io-client";
-import { pendingFriendsInvitations } from "../redux/features/friendSlice";
+import {
+  pendingFriendsInvitations,
+  setFriends,
+  onlineFriends,
+} from "../redux/features/friendSlice";
 
 let socket = null;
 
@@ -14,10 +18,20 @@ export const connectWithSocketServer = (userToken, dispatch) => {
     console.log(socket.id);
   });
 
-  socket.on("friend-invitation", (data) => { 
+  socket.on("friend-invitation", (data) => {
     const { pendingInvitations } = data;
     console.log("friend invitation event received", pendingInvitations);
     dispatch(pendingFriendsInvitations(pendingInvitations));
   });
-  
+
+  socket.on("friends-list", (data) => {
+    const { friends } = data;
+    dispatch(setFriends(friends));
+  });
+
+  socket.on("online-users", (data) => {
+    const { onlineUsers } = data;
+    console.log("online users update came", onlineUsers);
+    dispatch(onlineFriends(onlineUsers));
+  });
 };
