@@ -3,6 +3,7 @@ import friendInvitationDecisionSchema from "../lib/validations/friendInvitations
 import FriendModel from "../models/friend.js";
 import UserModel from "../models/user.js";
 import friendsPendingInvitations from "../socketHandler/updates/friends.js";
+import { updateFriends } from "../socketHandler/updates/friends.js";
 
 export const sendFriendInvitation = async (req, res) => {
   try {
@@ -74,10 +75,10 @@ export const sendFriendInvitation = async (req, res) => {
 export const acceptFriendInvitation = async (req, res) => {
   try {
     const body = await friendInvitationDecisionSchema.validate(req.body);
-    const { id } = body;
+    const { id } = body.value;
 
     const invitation = await FriendModel.findById(id);
-    if (invitation) {
+    if (!invitation) {
       return res.status(401).json({
         success: false,
         message: "Something went wrong. please try again",
@@ -98,6 +99,9 @@ export const acceptFriendInvitation = async (req, res) => {
 
     // delete invitations
     await FriendModel.findOneAndDelete(id);
+
+    updateFriends(senderId.toString());
+    updateFriends(receiverId.toString());
 
     // update list of friends pending invitations
     friendsPendingInvitations(receiverId);

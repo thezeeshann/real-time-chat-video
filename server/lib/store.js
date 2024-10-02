@@ -31,6 +31,14 @@ export const getActiveUsers = (userId) => {
       activeUsers.push(key);
     }
   });
-
   return activeUsers;
+};
+
+export const getOnlineUser = () => {
+  const onlineUsers = [];
+  connectedUser.forEach((key, value) => {
+    onlineUsers.push({ socketId: key, userId: value.userId });
+  });
+
+  return onlineUsers;
 };
