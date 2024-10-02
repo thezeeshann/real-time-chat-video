@@ -4,31 +4,17 @@ import { connectDB } from "./lib/db.js";
 import authRoute from "./routes/auth.js";
 import friendRoute from "./routes/friends.js";
 import http from "http";
-import { Server } from "socket.io";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import verifyTokenSocket from "./lib/middleware/authSocket.js";
-import newConnectionHandlere from "./socketHandler/newConnectionHandler.js";
-import disconnectHandler from "./socketHandler/disconnectedHandler.js";
-import { setSocketServerInstance } from "./lib/store.js";
+import { initializeSocketServer } from "./socketServer.js"; // Import the socket server setup
+
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8000;
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
 
-setSocketServerInstance(io);
-io.use((socket, next) => {
-  verifyTokenSocket(socket, next);
-});
-
+// Set up middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -37,18 +23,14 @@ app.use(
     credentials: true,
   })
 );
+
+// Connect to the database
 connectDB();
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  console.log(socket.id);
-  newConnectionHandlere(socket, io);
+// Initialize the socket server
+initializeSocketServer(server);
 
-  socket.on("disconnect", () => {
-    disconnectHandler(socket);
-  });
-});
-
+// Define your routes
 app.get("/", (req, res) => {
   return res.status(200).json({
     success: true,
@@ -59,6 +41,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/friend", friendRoute);
 
+// Start the server
 server.listen(port, () => {
   console.log(
     `Listening on port ${port}. Visit http://localhost:${port} in your browser.`
