@@ -10,18 +10,18 @@ export const friendSlice = createSlice({
   name: "friend",
   initialState: initialState,
   reducers: {
-    friends(state, action) {
+    setFriends(state, action) {
       state.friends = action.payload;
     },
     pendingFriendsInvitations(state, action) {
       state.pendingFriends = action.payload;
     },
     onlineFriends(state, action) {
-      state.pendingFriends = action.payload;
+      state.onlineUsers = action.payload;
     },
   },
 });
 
-export const { friends, pendingFriendsInvitations, onlineFriends } =
+export const { setFriends, pendingFriendsInvitations, onlineFriends } =
   friendSlice.actions;
 export default friendSlice.reducer;
