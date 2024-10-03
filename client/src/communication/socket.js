@@ -35,3 +35,8 @@ export const connectWithSocketServer = (userToken, dispatch) => {
     dispatch(onlineFriends(onlineUsers));
   });
 };
+
+export const sendDirectMessage = (data) => {
+  console.log(data, "data comming to the server");
+  socket.emit("direct-message", data);
+};
