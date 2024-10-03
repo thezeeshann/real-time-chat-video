@@ -8,8 +8,12 @@ import {
   handleAcceptInvitations,
   handleRejectInvitations,
 } from "../services/friendInvitation";
+import { setChosenChatDetails } from "../redux/features/chatSlice";
+import { useDispatch } from "react-redux";
+import { chatTypes } from "../redux/features/chatSlice";
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { pendingFriends } = useSelector((state) => state.friend);
   const { onlineUsers } = useSelector((state) => state.friend);
@@ -37,6 +41,14 @@ const Sidebar = () => {
       toast.error(error.response.data.message);
     }
   };
+  const handleChooseActiveChat = (dispatch, id, name) => {
+    dispatch(
+      setChosenChatDetails({
+        details: { id: id, name: name },
+        chatType: chatTypes.DIRECT,
+      })
+    );
+  };
 
   return (
     <>
@@ -56,7 +68,13 @@ const Sidebar = () => {
               (user) => user.socketId.userId === friend.id
             );
             return (
-              <div key={friend.id} className="flex flex-col py-2 gap-y-1">
+              <div
+                key={friend._id}
+                className="flex flex-col py-2 gap-y-1 cursor-pointer"
+                onClick={() =>
+                  handleChooseActiveChat(dispatch, friend?.id, friend?.name)
+                }
+              >
                 <div className="flex flex-row items-center justify-between">
                   <div className="flex flex-row items-center gap-x-2">
                     <span className="p-2 capitalize bg-blue-500 rounded-full">

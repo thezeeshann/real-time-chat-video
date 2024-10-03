@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
   const dispatch = useDispatch();
   const handleLogout = () => {
     localStorage.removeItem("user");
