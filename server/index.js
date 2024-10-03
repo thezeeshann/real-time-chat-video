@@ -6,7 +6,7 @@ import friendRoute from "./routes/friends.js";
 import http from "http";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { initializeSocketServer } from "./socketServer.js"; // Import the socket server setup
+import { initializeSocketServer } from "./socketServer.js"; 
 
 dotenv.config();
 
