@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import {
   handleAcceptInvitations,
   handleRejectInvitations,
-} from "../services/friendInvitation";
+} from "../utils/friendInvitation";
 import { setChosenChatDetails } from "../redux/features/chatSlice";
 import { useDispatch } from "react-redux";
 import { chatTypes } from "../redux/features/chatSlice";
@@ -17,6 +17,7 @@ const Sidebar = () => {
   const { token } = useSelector((state) => state.auth);
   const { pendingFriends } = useSelector((state) => state.friend);
   const { onlineUsers } = useSelector((state) => state.friend);
+  const { chosenChatDetails } = useSelector((state) => state.chat);
   const { friends } = useSelector((state) => state.friend);
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -61,7 +62,7 @@ const Sidebar = () => {
             Add Friend
           </h1>
         </div>
-        <p className="mt-2 font-semibold text-center">Private message</p>
+        {/* <p className="mt-2 font-semibold text-center">Private message</p> */}
         <div className="flex-1 p-4">
           {friends.map((friend) => {
             const isOnline = onlineUsers.some(
@@ -69,18 +70,24 @@ const Sidebar = () => {
             );
             return (
               <div
-                key={friend._id}
-                className="flex flex-col py-2 gap-y-1 cursor-pointer"
+                key={friend.id}
+                className="flex flex-col py-1 cursor-pointer gap-y-1 "
                 onClick={() =>
                   handleChooseActiveChat(dispatch, friend?.id, friend?.name)
                 }
               >
                 <div className="flex flex-row items-center justify-between">
-                  <div className="flex flex-row items-center gap-x-2">
-                    <span className="p-2 capitalize bg-blue-500 rounded-full">
+                  <div className="flex flex-row items-center gap-x-2 ">
+                    <span
+                      className={`${
+                        chosenChatDetails?.id === friend?.id
+                          ? "bg-blue-500"
+                          : "bg-gray-500"
+                      } p-2 font-semibold text-white capitalize rounded-full`}
+                    >
                       {friend?.name?.slice(0, 2)}
                     </span>
-                    <p>{friend?.name}</p>
+                    <p className="capitalize">{friend?.name}</p>
                   </div>
                   {isOnline ? (
                     <span>

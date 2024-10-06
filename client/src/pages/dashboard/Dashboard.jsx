@@ -4,12 +4,13 @@ import { connectWithSocketServer } from "../../communication/socket";
 import { useSelector, useDispatch } from "react-redux";
 
 const Dashboard = () => {
+  const { chosenChatDetails } = useSelector((state) => state.chat);
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   if (token !== null && user !== null) {
-    connectWithSocketServer(token, dispatch);
+    connectWithSocketServer(token, dispatch, chosenChatDetails, user);
   }
 
   return (
