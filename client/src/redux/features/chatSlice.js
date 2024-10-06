@@ -8,7 +8,7 @@ export const chatTypes = {
 const initialState = {
   chosenChatDetails: null,
   chatType: null,
-  message: [],
+  messages: [],
 };
 
 export const chatSlice = createSlice({
@@ -16,7 +16,7 @@ export const chatSlice = createSlice({
   initialState: initialState,
   reducers: {
     setMessage(state, action) {
-      state.message = action.payload;
+      state.messages = action.payload;
     },
     setChatType(state, action) {
       state.chatType = action.payload;
@@ -24,7 +24,6 @@ export const chatSlice = createSlice({
     setChosenChatDetails(state, action) {
       state.chosenChatDetails = action.payload.details;
       state.chatType = action.payload.chatType;
-      state.message = [];
     },
   },
 });
