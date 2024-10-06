@@ -3,7 +3,6 @@ import ConversationModel from "../models/conversation.js";
 import { updateChatHistory } from "./updates/chat.js";
 
 export const directMessageHandler = async (socket, data) => {
-  console.log(socket, "sssss");
   try {
     console.log("direct message being handled");
 
@@ -37,7 +36,7 @@ export const directMessageHandler = async (socket, data) => {
       });
 
       // perfome and update sender and receiver if it is online
-      updateChatHistory(conversation._id.toString());
+      updateChatHistory(newConversation._id.toString());
     }
   } catch (error) {
     console.log(error);

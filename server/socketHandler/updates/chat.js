@@ -9,7 +9,7 @@ export const updateChatHistory = async (
     conversatiomId
   ).populate({
     path: "messages",
-    model: "Model",
+    model: "Message",
     populate: {
       path: "author",
       model: "User",
