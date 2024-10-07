@@ -9,6 +9,10 @@ const store = configureStore({
     friend: friendReducer,
     chat: chatReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, 
+    }),
 });
 
 export default store;

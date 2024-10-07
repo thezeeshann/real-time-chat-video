@@ -24,6 +24,7 @@ export const chatSlice = createSlice({
     setChosenChatDetails(state, action) {
       state.chosenChatDetails = action.payload.details;
       state.chatType = action.payload.chatType;
+      state.messages = [];
     },
   },
 });
