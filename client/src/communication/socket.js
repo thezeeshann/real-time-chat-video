@@ -5,7 +5,6 @@ import {
   onlineFriends,
 } from "../redux/features/friendSlice";
 import { updateDirectChatHistoryIfActive } from "../utils/chat";
-// import { useSelector } from "react-redux";
 
 let socket = null;
 
@@ -15,8 +14,6 @@ export const connectWithSocketServer = (
   chosenChatDetails,
   user
 ) => {
-
-
   socket = io("http://localhost:8000", {
     auth: {
       token: userToken,
@@ -29,7 +26,7 @@ export const connectWithSocketServer = (
 
   socket.on("friend-invitation", (data) => {
     const { pendingInvitations } = data;
-    // console.log("friend invitation event received", pendingInvitations);
+    console.log("friend invitation event received", pendingInvitations);
     dispatch(pendingFriendsInvitations(pendingInvitations));
   });
 
@@ -40,7 +37,7 @@ export const connectWithSocketServer = (
 
   socket.on("online-users", (data) => {
     const { onlineUsers } = data;
-    // console.log("online users update came", onlineUsers);
+    console.log("online users update came", onlineUsers);
     dispatch(onlineFriends(onlineUsers));
   });
 
