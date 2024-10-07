@@ -110,7 +110,7 @@ const Char = () => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={handleKeyPressed}
-                  className="w-full p-2 text-white bg-gray-600 rounded-md"
+                  className="w-full p-2 text-white bg-gray-600 rounded-md outline-none"
                   placeholder="Type a message..."
                 />
               </div>
