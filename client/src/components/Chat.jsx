@@ -1,11 +1,10 @@
 import { useSelector } from "react-redux";
 import UserMenu from "./UserMenu";
 import { useEffect, useState } from "react";
-// import { setChosenChatDetails } from "../redux/features/chatSlice";
 import { sendDirectMessage } from "../communication/socket";
 import { getDirectChatHistory } from "../communication/socket";
 
-const Char = () => {
+const Chat = () => {
   const { chosenChatDetails } = useSelector((state) => state.chat);
   const { messages } = useSelector((state) => state.chat);
   const [message, setMessage] = useState("");
@@ -122,4 +121,4 @@ const Char = () => {
   );
 };
 
-export default Char;
+export default Chat;
