@@ -11,6 +11,8 @@ import {
 import { setChosenChatDetails } from "../redux/features/chatSlice";
 import { useDispatch } from "react-redux";
 import { chatTypes } from "../redux/features/chatSlice";
+// import { FaRegSquarePlus } from "react-icons/fa6";
+import { createNewRoom } from "../communication/roomHandler";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -35,11 +37,15 @@ const Sidebar = () => {
         toast.success(response.data.message);
         setIsOpen(false);
       } else {
-        toast.error(response?.data.message);
+        toast.error(response?.data.error);
       }
     } catch (error) {
       console.log("FRIEND INVITATION API ERROR", error);
-      toast.error(error.response.data.message);
+      if (error.response.data.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error(error.response.data.message);
+      }
     }
   };
   const handleChooseActiveChat = (dispatch, id, name) => {
@@ -50,13 +56,23 @@ const Sidebar = () => {
       })
     );
   };
+  const createRoomButton = () => {
+    createNewRoom(dispatch);
+  };
 
   return (
     <>
       <div className="relative flex flex-col w-64 min-h-screen text-white bg-gray-800">
-        <div className="p-2 text-center bg-green-500 rounded-md">
+        <div className="flex items-center justify-center w-full">
+          <button
+            onClick={createRoomButton}
+            className="text-white bg-blue-500 rounded-md w-[20%] cursor-pointer py-2 font-semibold"
+          >
+            {/* <FaRegSquarePlus size={22} color="#ffffff" className="" /> */}
+            <p>Room</p>
+          </button>
           <h1
-            className="font-semibold cursor-pointer"
+            className="p-2 w-[60%] font-semibold text-center bg-green-500 rounded-md cursor-pointer"
             onClick={() => setIsOpen((prev) => !prev)}
           >
             Add Friend

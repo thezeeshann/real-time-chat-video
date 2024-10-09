@@ -46,7 +46,7 @@ const Chat = () => {
         </div>
 
         {!chosenChatDetails ? (
-          <div className="flex items-center justify-center h-screen">
+          <div className="flex justify-center h-screen mt-10">
             <p className="text-xl font-semibold">
               To start chatting - choose the conversation
             </p>
