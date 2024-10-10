@@ -1,5 +1,7 @@
 import { useState } from "react";
 import ResizeRoomButton from "./ResizeRoomButton";
+import VideoContainer from "./VideoContainer";
+import RoomButton from "./RoomButton";
 
 const Room = () => {
   const [isRoomMinized, setIsRoomMiniazed] = useState(true);
@@ -16,6 +18,8 @@ const Room = () => {
           : "w-[100%] h-[100vh]"
       } absolute rounded-md flex flex-col items-center justify-center bg-[#202225]`}
     >
+      <VideoContainer />
+      <RoomButton />
       <ResizeRoomButton
         isRoomMinized={isRoomMinized}
         roomResizeHandler={roomResizeHandler}
