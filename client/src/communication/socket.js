@@ -5,6 +5,7 @@ import {
   onlineFriends,
 } from "../redux/features/friendSlice";
 import { updateDirectChatHistoryIfActive } from "../utils/chat";
+import { newRoomCreated, updateActiveRooms } from "./roomHandler";
 
 let socket = null;
 
@@ -12,7 +13,8 @@ export const connectWithSocketServer = (
   userToken,
   dispatch,
   chosenChatDetails,
-  user
+  user,
+  friends
 ) => {
   socket = io("http://localhost:8000", {
     auth: {
@@ -37,13 +39,21 @@ export const connectWithSocketServer = (
 
   socket.on("online-users", (data) => {
     const { onlineUsers } = data;
-    console.log("online users update came", onlineUsers);
+    // console.log("online users update came", onlineUsers);
     dispatch(onlineFriends(onlineUsers));
   });
 
   socket.on("direct-chat-history", (data) => {
-    console.log(data, "direct chat history");
+    console.log(data, "Chat history received");
     updateDirectChatHistoryIfActive(data, dispatch, chosenChatDetails, user);
+  });
+  socket.on("room-create", (data) => {
+    console.log(data, "create room data");
+    newRoomCreated(data, dispatch);
+  });
+
+  socket.on("active-rooms", (data) => {
+    updateActiveRooms(data, dispatch, friends);
   });
 };
 
@@ -53,6 +63,10 @@ export const sendDirectMessage = (data) => {
 };
 
 export const getDirectChatHistory = (data) => {
-  console.log(data, "data comming to the server");
+  console.log(data, "Fetching chat history for conversation");
   socket.emit("direct-chat-history", data);
+};
+
+export const createNewRooms = (data) => {
+  socket.emit("room-create", data);
 };

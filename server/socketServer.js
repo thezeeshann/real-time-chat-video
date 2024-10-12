@@ -5,6 +5,7 @@ import verifyTokenSocket from "./lib/middleware/authSocket.js";
 import { getOnlineUser, setSocketServerInstance } from "./lib/store.js";
 import { directMessageHandler } from "./socketHandler/directMessageHandler.js";
 import { directChatHistoryHandler } from "./socketHandler/directChatHistoryHandler.js";
+import { createNewRoomHandler } from "./socketHandler/roomCreatorHandler.js";
 
 export const initializeSocketServer = (server) => {
   const io = new Server(server, {
@@ -28,6 +29,7 @@ export const initializeSocketServer = (server) => {
 
   io.on("connection", (socket) => {
     console.log("a user connected", socket.id);
+
     newConnectionHandlere(socket, io);
     emitOnlineUser();
 
@@ -37,6 +39,11 @@ export const initializeSocketServer = (server) => {
 
     socket.on("direct-chat-history", (data) => {
       directChatHistoryHandler(socket, data);
+    });
+
+    socket.on("room-create", (socket) => {
+      console.log(socket)
+      createNewRoomHandler(socket);
     });
 
     socket.on("disconnect", () => {
