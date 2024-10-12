@@ -9,10 +9,11 @@ const Dashboard = () => {
   const { isUserInRoom } = useSelector((state) => state.room);
   const { token } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.auth);
+  const { friends } = useSelector((state) => state.friend);
   const dispatch = useDispatch();
 
   if (token !== null && user !== null) {
-    connectWithSocketServer(token, dispatch, chosenChatDetails, user);
+    connectWithSocketServer(token, dispatch, chosenChatDetails, user, friends);
   }
 
   return (
