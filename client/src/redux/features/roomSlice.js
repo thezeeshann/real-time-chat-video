@@ -19,8 +19,14 @@ export const roomSlice = createSlice({
       state.isUserInRoom = action.payload.isUserInRoom;
       state.isUserRoomCreator = action.payload.isUserRoomCreator;
     },
+    setRoomDetails(state, action) {
+      state.roomDetails = action.payload;
+    },
+    setActiveRooms(state, action) {
+      state.activeRooms = action.payload;
+    },
   },
 });
 
-export const { openRoom } = roomSlice.actions;
+export const { openRoom, setRoomDetails, setActiveRooms } = roomSlice.actions;
 export default roomSlice.reducer;
