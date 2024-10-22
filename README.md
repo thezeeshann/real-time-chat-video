@@ -27,31 +27,45 @@ A live demo of the application is available [here](https://example.com).
    ```bash
    git clone https://github.com/yourusername/real-time-chat-video.git
    cd real-time-chat-video
+   ```
 
 2. **Navigate to the server directory**:
    ```bash
    cd server
+   ```
 
 3. **Install server dependencies**:
    ```bash
    npm install
+   ```
 
-4. **Run the server**:
+4. **Create a .env file in the root directory of 'server' to store your environment variables:**
+
+5. **Add the following variables to the .env file**:
+   ```bash
+   PORT=8000
+   MONGO_URL=your_mongo_url
+   JWT_SECRET=your_jwt_secret
+   ```
+
+6. **Run the server**:
    ```bash
    npm run dev
+   ```
 
-5. **Navigate to the client directory**:
+7. **Navigate to the client directory**:
    ```bash
    cd ../client
+   ```
 
-6. **Install client dependencies**:
+8. **Install client dependencies**:
    ```bash
    npm install
+   ```
 
-7. **Run the client**:
+9. **Run the client**:
    ```bash
    npm run dev
+   ```
 
 This will start the client at http://localhost:3000
-
-
